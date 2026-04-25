@@ -29,7 +29,7 @@
         <div class="ticker-track">
           <span class="ticker-item">Berita pilihan dari penulis terpercaya</span>
           <span class="ticker-sep">✦</span>
-          <span class="ticker-item">Gunakan pencarian & filter untuk pengalaman terbaik</span>
+          <span class="ticker-item">Gunakan pencarian &amp; filter untuk pengalaman terbaik</span>
           <span class="ticker-sep">✦</span>
           <span class="ticker-item">Klik artikel untuk membaca selengkapnya</span>
         </div>
@@ -353,14 +353,16 @@ const getCategory = (article: Article) => {
 
 const getDescription = (article: Article) =>
   article.description ||
-  (article.content?.slice(0, 120).trim() + '...') ||
+  (article.content ? article.content.slice(0, 120).trim() + '...' : '') ||
   'Deskripsi tidak tersedia.'
 
-const getInitials = (author: string) => {
+// ✅ FIX: Added optional chaining to prevent TS2532 "Object is possibly undefined"
+const getInitials = (author: string): string => {
   if (!author) return 'DN'
-  const parts = author.trim().split(/\s+/)
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
-  return `${parts[0][0]}${parts[1][0]}`.toUpperCase()
+  const parts = author.trim().split(/\s+/).filter(Boolean)
+  if (parts.length === 0) return 'DN'
+  if (parts.length === 1) return (parts[0]?.slice(0, 2) ?? 'DN').toUpperCase()
+  return (`${parts[0]?.[0] ?? ''}${parts[1]?.[0] ?? ''}`).toUpperCase() || 'DN'
 }
 
 const getDate = (article: Article) => article.publishedAt || new Date().toISOString()
@@ -1296,6 +1298,21 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 .modal-enter-active .modal-panel, .modal-leave-active .modal-panel { transition: transform 0.25s ease; }
 .modal-enter-from .modal-panel { transform: translateY(20px) scale(0.97); }
 .modal-leave-to .modal-panel { transform: translateY(10px) scale(0.98); }
+
+/* fade-up animation for cards and list rows */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-up {
+  animation: fadeUp 0.45s ease forwards;
+}
 
 @media (max-width: 1100px) {
   .card { grid-column: span 6; }

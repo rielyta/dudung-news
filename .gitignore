@@ -1,2 +1,22 @@
 node_modules
 netlify.toml
+# Nuxt
+.nuxt
+.output
+.data
+.env
+.cache
+
+# Node
+npm-debug.log*
+
+# Build
+dist
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode
+.idea

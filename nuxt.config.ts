@@ -1,13 +1,13 @@
-import { defineNuxtConfig } from 'nuxt/config'
-import { resolve } from 'path'
-
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  future: {
+    compatibilityVersion: 4,
+  },
+  nitro: {
+    preset: 'netlify'
+  },
+  compatibilityDate: '2025-01-01',
   devtools: { enabled: false },
   css: ['~/assets/css/main.css'],
-  alias: {
-    '~': resolve(__dirname, './'),
-  },
   app: {
     head: {
       title: 'Dudung News — Berita Terkini',
